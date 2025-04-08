@@ -34,5 +34,6 @@ obj
 # Styles Generated Code
 *.scss.ts
 
-# JS Generated Code
+## Dataverse devrools generated files
+dvdt.linker.xml
 WebResources/scripts/*

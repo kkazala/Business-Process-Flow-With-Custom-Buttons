@@ -9,8 +9,9 @@ export class Action {
     public static BtnMoveNext = async (formContext: Xrm.FormContext) => {
 
         FormUtils.HideAllNotifications(formContext);
+        FormUtils.SetIsCustomButton(true);
 
-        // set statuscode, state, set kk_iscustombutton to true; does NOT save the form
+        // set statuscode, state, set kk_iscustombutton to true
         const resultSave = await FormUtils.OnStageChangeUpdateAndSaveAsync(formContext, XrmEnum.StageChangeDirection.Next);
 
         if(resultSave){
@@ -29,10 +30,12 @@ export class Action {
         else{
             formContext.ui.setFormNotification("Failed to update form for next stage", "ERROR", "save");
         }
+        FormUtils.SetIsCustomButton(false);
     }
     public static BtnMovePrevious = async(formContext: Xrm.FormContext) => {
 
         FormUtils.HideAllNotifications(formContext);
+        FormUtils.SetIsCustomButton(true);
 
         // set statuscode, state, set kk_iscustombutton to true
         const resultSave = await FormUtils.OnStageChangeUpdateAndSaveAsync(formContext, XrmEnum.StageChangeDirection.Previous);
@@ -53,5 +56,6 @@ export class Action {
         else{
             formContext.ui.setFormNotification("Failed to update form for previous stage", "ERROR", "save");
         }
+        FormUtils.SetIsCustomButton(false);
     }
 }

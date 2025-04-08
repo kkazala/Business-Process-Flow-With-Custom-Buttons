@@ -1,8 +1,6 @@
 ﻿export default class FormUtils{
     //#region private methods
-    private static setIsCustomButton = (formContext: Xrm.FormContext, value: boolean) => {
-        formContext.getAttribute("kk_iscustombutton").setValue(value);
-    }
+
     private static setStatus = (formContext: Xrm.FormContext, fStatusCode: string, status: Kk_table1Enum.statuscode) => {
         formContext.getAttribute(fStatusCode).setValue(status);
         formContext.getAttribute(fStatusCode).fireOnChange();
@@ -18,6 +16,14 @@
         formContext.getAttribute(fStateCode).fireOnChange();
     }
     //#endregion
+    public static SetIsCustomButton = (value: boolean) => {
+        // formContext.getAttribute("kk_iscustombutton").setValue(value);
+        localStorage.setItem("kk_iscustombutton", value.toString());
+
+    }
+    public static GetIsCustomButton = (): boolean => {
+        return localStorage.getItem("kk_iscustombutton") === "true" ? true : false;
+    }
 
     public static HideAllNotifications = (formContext: Xrm.FormContext) => {
         formContext.ui.clearFormNotification("versionMismatch");
@@ -32,8 +38,6 @@
         let success: boolean = false;
 
         try{
-
-            FormUtils.setIsCustomButton(formContext, true);
 
             switch (formContext.data.process.getActiveStage().getName()) {
                 case "Request":
@@ -90,8 +94,6 @@
         let success: boolean = false;
 
         try {
-            FormUtils.setIsCustomButton(formContext, false);
-
             switch (formContext.data.process.getActiveStage().getName()) {
                 case "Request":
                     FormUtils.setStatus(formContext, "statuscode", Kk_table1Enum.statuscode.Draft);
@@ -105,7 +107,6 @@
             }
 
             await formContext.data.save();  //returns saved entityReference obj  {entityType:string, id:guid, name:undefined}
-
             success = true;
         }
         catch (error) {

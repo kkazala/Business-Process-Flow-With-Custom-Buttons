@@ -6,13 +6,16 @@ const currentVersion = "0.0.1.0";
 export class Form {
 
     private static onPreStageChange = function (executionContext: Xrm.Events.EventContext) {
+
         //custom buttons set the flag to true, so the stage change is allowed
         const formContext = executionContext.getFormContext() as Xrm.Kk_table1;
+
         FormUtils.HideAllNotifications(formContext);
 
         // if the event is triggered by the custom buttons, ok
         // otherwise cancel the stage change
-        if (formContext.getAttribute("kk_iscustombutton").getValue() !== true) {
+        // if (formContext.getAttribute("kk_iscustombutton").getValue() !== true) {
+        if(FormUtils.GetIsCustomButton() !== true){
             //prevent stage change
             (executionContext as Xrm.Events.StageChangeEventContext).getEventArgs().preventDefault();
             formContext.ui.setFormNotification(

@@ -7,8 +7,6 @@ export type ResultInfo={
 
 // The "kk_iscustombutton" field is set to "true" when a custom ribbon button is clicked (FormUtils.UpdateFormOnStageChange)
 // It is automatically set to "false" when the move to the next/previous stage is successful, and during rollback (FormUtils.RevertFormOnStageChange)
-const fIsCustomButtonName= "kk_iscustombutton";
-
 export default class StageChangeActions {
 
     private static _moveNextAsync = async (formContext: Xrm.FormContext) => {
@@ -32,6 +30,7 @@ export default class StageChangeActions {
             });
         });
     }
+
     public static IsLastStage= (formContext: Xrm.FormContext): boolean => {
         const curStage = formContext.data.process.getActiveStage().getName();
         const path = formContext.data.process.getActivePath().get().map(s => s.getName());
@@ -43,7 +42,7 @@ export default class StageChangeActions {
         return curStage === path[0];
     }
 
-    //async MoveStage methof
+    //async MoveStage method
     public static MoveStageAsync = async function (formContext: Xrm.FormContext, stageDelegate: AsyncFunction): Promise<ResultInfo> {
         let success: boolean = false;
         let message: string = "";
@@ -84,7 +83,6 @@ export default class StageChangeActions {
                     break;
                 case "success":
                     //reset the isCustomButton field to false and save
-                    formContext.getAttribute(fIsCustomButtonName).setValue(false);
                     await formContext.data.save();
                     success = true;
                     break;
@@ -120,7 +118,6 @@ export default class StageChangeActions {
                     break;
                 case "success":
                     //reset the isCustomButton field to false and save
-                    formContext.getAttribute(fIsCustomButtonName).setValue(false);
                     await formContext.data.save();
                     success = true;
                     break;
@@ -143,7 +140,6 @@ export default class StageChangeActions {
 
             const result = await StageChangeActions._setProcessStatus(formContext, "finished");
             if (result === "finished") {
-                formContext.getAttribute(fIsCustomButtonName).setValue(false);
                 await formContext.data.save();
                 success = true;
             }
@@ -160,7 +156,6 @@ export default class StageChangeActions {
 
         const result = await StageChangeActions._setProcessStatus(formContext, "active");
         if (result === "active") {
-            formContext.getAttribute(fIsCustomButtonName).setValue(false);
             await formContext.data.save();
             success = true;
         }
