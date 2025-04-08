@@ -5,7 +5,7 @@ const currentVersion = "0.0.1.0";
 // Usage Example: kk.Request.Form.OnLoad;, replace 'kk' with your own namespace
 export class Form {
 
-    private static onPreStageChange = function (executionContext: Xrm.Events.EventContext) {
+    private static ensureCustomButton = function (executionContext: Xrm.Events.EventContext) {
 
         //custom buttons set the flag to true, so the stage change is allowed
         const formContext = executionContext.getFormContext() as Xrm.Kk_table1;
@@ -18,6 +18,7 @@ export class Form {
         if(FormUtils.GetIsCustomButton() !== true){
             //prevent stage change
             (executionContext as Xrm.Events.StageChangeEventContext).getEventArgs().preventDefault();
+
             formContext.ui.setFormNotification(
                 "Please use the buttons in the toolbar in order to move to another stage of the review process.",
                 "INFO", "movestagecancelled"
@@ -42,7 +43,9 @@ export class Form {
         // This event occurs after the user selects the Next Stage, Move to previous stage or Set Active Stage buttons in the user interface
         // or when a developer uses the formContext.data.process.moveNext, formContext.data.process.movePrevious,
         // or formContext.data.process.setActiveStage methods.
-        formContext.data.process.addOnPreStageChange(Form.onPreStageChange);
+        formContext.data.process.addOnPreStageChange(Form.ensureCustomButton);
+
+        formContext.data.process.addOnProcessStatusChange(Form.ensureCustomButton);
 
     }
 }
