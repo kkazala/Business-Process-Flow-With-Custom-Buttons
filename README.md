@@ -115,3 +115,11 @@ In order to see this demo in action, download the  packaged solution from [Githu
     - `Namespace.FileName.ClassName.FunctionName` if the functions are part of a class
 
 The `Namespace` value is defined in the `webpack.config.js` file under `output/library`.
+
+# Additional resources
+
+- [Dataverse DevTools on GitHub](https://github.com/Power-Maverick/DataverseDevTools-VSCode)
+- [Let’s try Dataverse DevTools to easily create/update WebResource customizations!](https://temmyraharjo.wordpress.com/2022/09/24/lets-try-dataverse-devtools-to-easily-create-update-webresource-customizations/)
+- [Script web resource development using Fiddler Auto Responder](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/streamline-javascript-development-fiddler-autoresponder)
+- [Debug a model-driven app with Live monitor](https://learn.microsoft.com/en-us/power-apps/maker/monitor-modelapps)
+- [Troubleshoot form issues in model-driven apps](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/troubleshoot-forms) 👈
