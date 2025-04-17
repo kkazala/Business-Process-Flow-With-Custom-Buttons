@@ -77,6 +77,41 @@ Make sure to apply the same configuration when calling `BtnMovePrevious` to ensu
 
 ## Demo
 
-In order to see this demo in action, download the  packaged solution from [Github](https://github.com/kkazala/Business-Process-Flow-With-Custom-Buttons/releases) and import it to your Power Platform Environment (Dataverse required).
+In order to see this demo in action, download the  packaged solution from [Github](https://github.com/kkazala/Business-Process-Flow-With-Custom-Buttons/releases) and import it to your Power Platform Environment.
 
-##
+## Compatibility
+
+![Node.js v16](https://img.shields.io/badge/Node.js-v16-green.svg) ![Node.js v18](https://img.shields.io/badge/Node.js-v18-green.svg)
+![Power Platform](https://img.shields.io/badge/Power%20Platform-742774.svg) ![Dataverse](https://img.shields.io/badge/Dataverse-0e6a3e.svg)
+
+## Prerequisites
+
+- [Power Platform environment with dataverse](https://www.microsoft.com/en-us/power-platform/products/power-apps/free?msockid=138ec16535a7669d319bd0e9345667f0)
+- [Dataverse DevTools](https://marketplace.visualstudio.com/items?itemName=danish-naglekar.dataverse-devtools)
+
+## Contributors
+
+-   [Kinga Kazala](https://github.com/kkazala)
+
+## Version history
+
+| Version | Date            | Comments        |
+| ------- | --------------- | --------------- |
+| 1.0     | April 17, 2025  | Initial release |
+
+## Minimal Path to Awesome
+
+-   Clone this repository
+-   In the command line run:
+    -   `npm install`
+    -   `npm run build` to generate minified JavaScript, or `npm run build-dev` to generate script used for debugging
+- Debug your code following the [Script web resource development using Fiddler Auto Responder](https://learn.microsoft.com/en-us/power-apps/developer/model-driven-apps/streamline-javascript-development-fiddler-autoresponder) procedure
+- Once ready, rught click on the generated *.js file and click **Upload & Publish Web Resource**
+
+![Upload and publish](./assets/upload.png)
+
+- When referencing a generated script in a form or button, use the following syntax for the function:
+    - `Namespace.FileName.FunctionName` if the functions are exported directly from a `*.ts` file, or
+    - `Namespace.FileName.ClassName.FunctionName` if the functions are part of a class
+
+The `Namespace` value is defined in the `webpack.config.js` file under `output/library`.
