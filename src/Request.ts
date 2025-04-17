@@ -44,8 +44,5 @@ export class Form {
         // or when a developer uses the formContext.data.process.moveNext, formContext.data.process.movePrevious,
         // or formContext.data.process.setActiveStage methods.
         formContext.data.process.addOnPreStageChange(Form.ensureCustomButton);
-
-        formContext.data.process.addOnProcessStatusChange(Form.ensureCustomButton);
-
     }
 }

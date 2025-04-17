@@ -1,4 +1,6 @@
-﻿type AsyncFunction = (formContext: Xrm.FormContext) => Promise<ResultInfo>;
+﻿
+type AsyncFunction = (formContext: Xrm.FormContext) => Promise<ResultInfo>;
+type StageDelegate = (formContext: Xrm.FormContext, finalizeLastStage:boolean) => Promise<ResultInfo>;
 
 export type ResultInfo={
     success: boolean;
@@ -26,7 +28,7 @@ export default class StageChangeActions {
     }
     private static _saveForm = async (formContext: Xrm.FormContext): Promise<ResultInfo> => {
         try{
-            await formContext.data.save();
+            await formContext.data.save();   //returns saved entityReference obj  {entityType:string, id:guid, name:undefined}
             return {success:true};
         }
         catch(error:any){
@@ -78,7 +80,7 @@ export default class StageChangeActions {
 
 
     //async MoveStage method
-    public static MoveStageAsync = async function (formContext: Xrm.FormContext, stageDelegate: AsyncFunction): Promise<ResultInfo> {
+    public static MoveStageAsync = async function (formContext: Xrm.FormContext, stageDelegate: StageDelegate, finalizeLastStage: boolean): Promise<ResultInfo> {
         let success: boolean = false;
         let message: string = "";
 
@@ -88,7 +90,7 @@ export default class StageChangeActions {
                 await formContext.data.save();
             }
             //call MoveNext / MovePrevious
-            return await stageDelegate(formContext);
+            return await stageDelegate(formContext,finalizeLastStage);
 
         }
         catch (error:any) {
@@ -97,42 +99,43 @@ export default class StageChangeActions {
         return {success,message};
     }
 
-    public static MoveNextAsync = async (formContext: Xrm.FormContext): Promise<ResultInfo> =>{
+    public static MoveNextAsync = async (formContext: Xrm.FormContext, finalizeLastStage:boolean): Promise<ResultInfo> =>{
 
-        //move to the next stage and complete the process at the same time
-        if (_FINALIZELASTSTAGE && StageChangeActions.IsNextStageIsLastStage(formContext)) {
+        const moveToLastAndFinalize = finalizeLastStage && StageChangeActions.IsNextStageIsLastStage(formContext);
+        const moveToLast = !finalizeLastStage && StageChangeActions.IsLastStage(formContext);
+
+        //move to the next (last) stage and complete the BPF at the same time
+        if (moveToLastAndFinalize) {
             const result = await StageChangeActions._moveNextAsync(formContext);
             return StageChangeActions._processResult(formContext, result, StageChangeActions.CompleteProcessAsync);
         }
-        else if (!_FINALIZELASTSTAGE && StageChangeActions.IsLastStage(formContext) ) {
-            if (formContext.data.process.getStatus() === "active"){
-                return await StageChangeActions.CompleteProcessAsync(formContext);
-            }
-            else {
-                return{
-                    success:false,
-                    message: "The process is already finished."
-                }
-            }
+        //move to the next (last) stage and do NOT complete the BPF
+        else if (moveToLast) {
+            return await StageChangeActions.CompleteProcessAsync(formContext);
         }
+        //move to the next stage
         else {
             const result = await StageChangeActions._moveNextAsync(formContext);
             return StageChangeActions._processResult(formContext, result, StageChangeActions._saveForm);
         }
     }
 
-    public static MovePreviousAsync = async (formContext: Xrm.FormContext): Promise<ResultInfo> => {
+    public static MovePreviousAsync = async (formContext: Xrm.FormContext, finalizeLastStage:boolean): Promise<ResultInfo> => {
 
+        //first stage, no previous stage
         if(StageChangeActions.IsFirstStage(formContext)){
             return {
                 success:false,
                 message: "The active stage is the first stage of the active path."
             };
         }
+        //last stage and the process is finished
         else if (StageChangeActions.IsLastStage(formContext) && formContext.data.process.getStatus() === "finished" ){
+            //restart the process
             const restartResult = await StageChangeActions.RestartProcessAsync(formContext);
 
-            if (_FINALIZELASTSTAGE && restartResult.success) {
+            //if stage was finalized automatically, additionally move to the previous stage
+            if (finalizeLastStage && restartResult.success) {
                 const result= await StageChangeActions._movePreviousAsync(formContext);
                 return StageChangeActions._processResult(formContext, result, StageChangeActions._saveForm);
             }
@@ -140,7 +143,8 @@ export default class StageChangeActions {
                 return restartResult;
             }
         }
-
+        // either last stage and the BPF is active
+        // or "middle" stages
         else {
             const result= await StageChangeActions._movePreviousAsync(formContext);
             return StageChangeActions._processResult(formContext, result, StageChangeActions._saveForm);
@@ -148,9 +152,6 @@ export default class StageChangeActions {
     }
 
     public static CompleteProcessAsync = async (formContext: Xrm.FormContext): Promise<ResultInfo> => {
-
-        let success: boolean = false;
-        let message: string = "";
 
         if (formContext.data.process.getStatus() === "active") {
 
@@ -165,7 +166,12 @@ export default class StageChangeActions {
                 }
             }
         }
-        return {success, message};
+        else {
+            return {
+                success: false,
+                message: "The process is already finished."
+            }
+        }
     };
 
     public static RestartProcessAsync = async (formContext: Xrm.FormContext): Promise<ResultInfo> =>{
