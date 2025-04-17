@@ -33,10 +33,8 @@ declare namespace Kk_table1 {
         createdonbehalfbyyominame = "createdonbehalfbyyominame",
         importsequencenumber = "importsequencenumber",
         kk_approvalstate = "kk_approvalstate",
-        kk_inputvalue = "kk_inputvalue",
         kk_iscustombutton = "kk_iscustombutton",
         kk_request = "kk_request",
-        kk_shouldfail = "kk_shouldfail",
         kk_table1id = "kk_table1id",
         modifiedby = "modifiedby",
         modifiedbyname = "modifiedbyname",
@@ -80,10 +78,8 @@ declare namespace Xrm {
         getAttribute(name: "createdonbehalfbyyominame"): Attributes.StringAttribute;
         getAttribute(name: "importsequencenumber"): Attributes.NumberAttribute;
         getAttribute(name: "kk_approvalstate"): Attributes.OptionSetAttribute;
-        getAttribute(name: "kk_inputvalue"): Attributes.StringAttribute;
         getAttribute(name: "kk_iscustombutton"): Attributes.BooleanAttribute;
         getAttribute(name: "kk_request"): Attributes.StringAttribute;
-        getAttribute(name: "kk_shouldfail"): Attributes.BooleanAttribute;
         getAttribute(name: "kk_table1id"): Attributes.StringAttribute;
         getAttribute(name: "modifiedby"): Attributes.LookupAttribute;
         getAttribute(name: "modifiedbyname"): Attributes.StringAttribute;
@@ -115,10 +111,8 @@ declare namespace Xrm {
         getControl(name: "createdonbehalfbyyominame"): Controls.StringControl;
         getControl(name: "importsequencenumber"): Controls.NumberControl;
         getControl(name: "kk_approvalstate"): Controls.OptionSetControl;
-        getControl(name: "kk_inputvalue"): Controls.StringControl;
         getControl(name: "kk_iscustombutton"): Controls.StandardControl;
         getControl(name: "kk_request"): Controls.StringControl;
-        getControl(name: "kk_shouldfail"): Controls.StandardControl;
         getControl(name: "kk_table1id"): Controls.StringControl;
         getControl(name: "modifiedby"): Controls.LookupControl;
         getControl(name: "modifiedbyname"): Controls.StringControl;

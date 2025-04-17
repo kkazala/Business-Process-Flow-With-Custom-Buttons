@@ -2,6 +2,7 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
     entry: {
+        test: "./src/test",
         Request: "./src/Request",
         Ribbon: "./src/Ribbon",
     },
