@@ -49,7 +49,13 @@ I made a "plan minimum" solution that covers the most important parts of the pro
 - automatically **finalizes the last stage**,
 - **restarts** the business process flow if **Previous Stage** button is clicked in **Finalized** stgae
 
-![custom buttons](./assets/custombuttons.png)
+### Move to the next stage
+
+![Move Next](./assets/MoveNext.gif)
+
+### Move to the previous stage
+
+![Move Previous](./assets/MovePrevious.gif)
 
 This logic is supported by a client-side script used by the form and the custom buttons:
 
